@@ -1,4 +1,4 @@
-%%% Day 1 RK Step
+%%% Day 1 RK Step, file 1
 
 %This function computes the value of X at the next time step
 %for any arbitrary RK method
@@ -19,4 +19,17 @@
 % rate_func_in when computing the next step
 function [XB, num_evals] = explicit_RK_step(rate_func_in,t,XA,h,BT_struct)
     %your code here
+
+    % initialize m x s  matrix of zeros for K
+    m = ; % height of X (height)
+    s = ; % number of stages for this method (width)
+    K = zeros(m, s);
+
+    % sum of dot product of vector of k's
+    sum_val1 = K*(A(i,:)');
+
+    % doc product of K and B
+    sum_val2 = K*B;
+
+    % how can you figure out what num_evals should be?
 end
