@@ -1,4 +1,4 @@
-%%% Day 1 RK implementation
+%%% Day 1 RK implementation, file 2
 
 %Runs numerical integration arbitrary RK method
 %INPUTS:
@@ -18,5 +18,41 @@
 %num_evals: total number of calls made to rate_func_in during the integration
 function [t_list,X_list,h_avg, num_evals] = explicit_RK_fixed_step_integration ...
 (rate_func_in,tspan,X0,h_ref,BT_struct)
-    %your code here
+    % get the start and end times
+    t_start = tspan(1);
+    t_end = tspan(2);
+
+    % find N
+    N = ceil((t_end - t_start)/h_ref);
+
+    % set vectors
+    t_vector = linspace(t_start, t_end, N+1)'; % needs to be a column vector
+    X_vector = zeros(N+1, length(X0));
+
+    % initial conditions
+    t_vector(1) = t_start;
+    X_vector(1, :) = X0(:)'; % rows are time steps, columns are components of X
+
+    % num evals
+    num_evals = 0;
+    h_avg = (t_end - t_start)/N; % same as h_ref?
+
+    % loop for N values
+    for n = 1:N
+        t_n = t_vector(n);
+        X_n = X_vector(n,:)'; % X_n is a column vector
+        % run one forward euler step
+        [XB, step_evals] = explicit_RK_step(rate_func_in,t,XA,h,BT_struct);
+
+        % update XA and time
+        t_vector(n+1) = t_n + h_avg;
+        X_vector(n+1,:) = XB(:)'; % XB is a column vector 
+
+        % update num_evals
+        num_evals = num_evals + step_evals;
+    end
+
+    % outputs
+    t_list = t_vector;
+    X_list = X_vector;
 end
