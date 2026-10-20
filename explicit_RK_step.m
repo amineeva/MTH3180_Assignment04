@@ -21,15 +21,26 @@ function [XB, num_evals] = explicit_RK_step(rate_func_in,t,XA,h,BT_struct)
     %your code here
 
     % initialize m x s  matrix of zeros for K
-    m = ; % height of X (height)
-    s = ; % number of stages for this method (width)
+    m = length(XA); % height of X (height)
+    s = length(BT_struct.B); % number of stages for this method (width)
     K = zeros(m, s);
 
-    % sum of dot product of vector of k's
-    sum_val1 = K*(A(i,:)');
+    % populate K matrix
+    for i = 1:s
+        % sum of dot product of vector of k's
+        sum_val1 = K*(BT_struct.A(i,:)');
+
+        % current stage
+        K(:,i) = rate_func_in(t + BT_struct.c(i)*h, XA + h*sum_val1);
+
+    end
 
     % doc product of K and B
-    sum_val2 = K*B;
+    sum_val2 = K*BT_struct.B;
+
+    % finding XB:
+    XB = XA + h*sum_val2;
 
     % how can you figure out what num_evals should be?
+    num_evals = s;
 end
