@@ -54,7 +54,7 @@ orbit_params = struct();
     figure;
 subplot(2, 1, 1);
 hold on
-    plot(t_range, V_list(:,1), 'k-',  'DisplayName', "Exact Solution", LineWidth=1.5 )
+    plot(t_range, V_list(:,1), 'k-',  'DisplayName', "Exact Solution", LineWidth=2 )
     xlabel('Time (-)', Interpreter='latex', FontSize=16)
     ylabel('X Position (-)', Interpreter='latex', FontSize=16)
     title('X Position of Planet vs Time', Interpreter='latex', FontSize=20)
@@ -62,7 +62,7 @@ hold on
 
  subplot(2, 1, 2)
 hold on
-    plot(t_range,V_list(:,2), 'k-', LineWidth=1.5)
+    plot(t_range,V_list(:,2), 'k-', LineWidth=2)
     title('Y Position of Planet vs Time', Interpreter='latex', FontSize=20)
     xlabel('Time (-)', Interpreter='latex',FontSize=16)
     ylabel('Y Position (-)', Interpreter='latex', FontSize=16)
@@ -85,7 +85,7 @@ h_ref=(t_max+1)/t_stepcount;
 
    [t_list,X_list,h_avg, num_evals] = explicit_RK_fixed_step_integration_orbital(@gravity_rate_func,tspan,V0,h_ref,BT_struct_H, orbit_params);
 
-    plot(t_list, X_list(:,1), 'r--', 'LineWidth', 1.2, 'MarkerSize', 2, 'DisplayName', "Huen's Method");
+    plot(t_list, X_list(:,1), 'r--', 'LineWidth', 1.5, 'MarkerSize', 1.5, 'DisplayName', "Huen's Method");
 
 %VAN DER HOUWEN'S/WRAY'S METHOD!
 
@@ -104,7 +104,7 @@ h_ref=(t_max+1)/t_stepcount;
 
    [t_list,X_list,h_avg, num_evals] = explicit_RK_fixed_step_integration_orbital(@gravity_rate_func,tspan,V0,h_ref,BT_struct_V, orbit_params);
 
-    plot(t_list, X_list(:,1), 'g--', 'LineWidth', 1.2, 'MarkerSize', 2, 'DisplayName', "Wray's Method");
+    plot(t_list, X_list(:,1), 'g--', 'LineWidth', 1.5, 'MarkerSize', 1.5, 'DisplayName', "Wray's Method");
 
     %KUTTA'S METHOD!
 
@@ -123,5 +123,5 @@ h_ref=(t_max+1)/t_stepcount;
 
    [t_list,X_list,h_avg, num_evals] = explicit_RK_fixed_step_integration_orbital(@gravity_rate_func,tspan,V0,h_ref,BT_struct_K, orbit_params);
 
-    plot(t_list, X_list(:,1), 'b--', 'LineWidth', 1.2, 'MarkerSize', 2, 'DisplayName',"Kutta's Method");
+    plot(t_list, X_list(:,1), 'b--', 'LineWidth', 1.5, 'MarkerSize', 1.5, 'DisplayName',"Kutta's Method");
     legend('show', 'Location', 'northwest', 'Interpreter', 'latex', 'FontSize', 14);
