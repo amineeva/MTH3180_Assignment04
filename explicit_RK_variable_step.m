@@ -27,4 +27,28 @@
 function [XB, num_evals, h_next, redo] = explicit_RK_variable_step...
 (rate_func_in,t,XA,h,BT_struct,p,error_desired)
     %your code here
+
+    % new stuff
+    safety = 0.9;
+    alpha = 2;
+
+    % compute embedded RK estimates
+    [XB1, XB2, num_evals] = RK_step_embedded(rate_func_in,t,XA,h,BT_struct);
+
+    % difference between estimates
+    estimate_diff = norm(XB1 - XB2);
+
+    % test whether to re-run step
+    redo = estimate_diff > error_desired;
+
+    % find adjustment factor
+    if estimate_diff == 0
+        adjustment = alpha;
+    else
+        adjustment = safety * (error_desired/estimate_diff)^(1/p);
+        adjustment = min(adjustment, alpha);
+    end
+
+    h_next = adjustment * h;
+    XB = XB1; % return the higher-order estimate
 end
