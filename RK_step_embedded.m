@@ -18,5 +18,29 @@
 %num_evals: A count of the number of times that you called
 % rate_func_in when computing the next step
 function [XB1, XB2, num_evals] = RK_step_embedded(rate_func_in,t,XA,h,BT_struct)
-    %your code here
+    % initialize m x s  matrix of zeros for K
+    m = length(XA); % height of X (height)
+    s = length(BT_struct.C); % number of stages for this method (width)
+    K = zeros(m, s);
+
+    % populate K matrix
+    for i = 1:s
+        % sum of dot product of vector of k's
+        sum_val1 = K*(BT_struct.A(i,:)');
+
+        % current stage
+        K(:,i) = rate_func_in(t + BT_struct.C(i)*h, XA + h*sum_val1);
+
+    end
+
+    % doc product of K and B -> now two because two rows
+    sum_val2_1 = K*BT_struct.B(1,:)';
+    sum_val2_2 = K*BT_struct.B(2,:)';
+
+    % finding XB -> now two
+    XB1 = XA + h*sum_val2_1;
+    XB2 = XA + h*sum_val2_2;
+
+    % how can you figure out what num_evals should be?
+    num_evals = s;
 end
