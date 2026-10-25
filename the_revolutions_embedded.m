@@ -139,7 +139,7 @@ h_ref=(t_max+1)/t_stepcount;
     
     V0 = [x0;y0;dxdt0;dydt0];
 
-   [t_list,X_list,h_avg, num_evals, h_list, local_error_list] = embedded_RK_fixed_step_integration_orbital(@gravity_rate_func,tspan,V0,h_ref,BT_struct_V, p,error_desired, orbit_params);
+   [t_list,X_list,h_avg, num_evals, h_list, local_error_list] = embedded_RK_fixed_step_integration_orbital(@gravity_rate_func,tspan,V0,h_ref,BT_struct_F, p,error_desired, orbit_params);
 
     plot(t_list, X_list(:,1), 'g--', 'LineWidth', 1.5, 'MarkerSize', 1.5, 'DisplayName', "Wray's Method");
 
