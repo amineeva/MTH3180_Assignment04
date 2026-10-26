@@ -1,4 +1,4 @@
-%%% Day 2 - RK integration
+%%% Day 2 - variable step RK integration
 
 %Runs numerical integration arbitrary RK method using variable time steps
 %INPUTS:
@@ -21,4 +21,47 @@
 function [t_list,X_list,h_avg, num_evals] = explicit_RK_variable_step_integration ...
 (rate_func_in,tspan,X0,h_ref,BT_struct,p,error_desired)
     %your code here
+
+    % get the start and end times
+    t_start = tspan(1);
+    t_end = tspan(2);
+
+    % setup
+    t_n = t_start;
+    X_n = X0(:);
+    h = h_ref;
+    t_list = t_start;
+    X_list = X_n(:)';
+    num_evals = 0;
+    total_step_size = 0;
+    accepted_steps = 0;
+
+    % run loop
+    while t_n < t_end
+        % orion's safeguard -> make sure the h size never goes beyond t_end
+        h = min(h, t_end - t_n);
+
+        % variable RK step
+        [XB, step_evals, h_next, redo] = explicit_RK_variable_step(rate_func_in,t,XA,h,BT_struct,p,error_desired);
+        
+        % add to counter
+        num_evals = num_evals + step_evals;
+
+        if redo % need to retry with a different step size
+            h = h_next;
+        else % step is fine, updating happens
+            t_n = t_n + h;
+            X_n = XB(:);
+            t_list(end+1, 1) = t_n;
+            X_list(end+1, :) = X_n(:)';
+            total_step_size = total_step_size + h;
+            accepted_steps = accepted_steps + 1;
+            
+            h = h_next;
+
+        end
+    end
+
+    % calculate avg accepted step size
+    h_avg = total_step_size / accepted_steps;
 end
