@@ -1,4 +1,5 @@
 %%% Day 2 - variable step RK integration
+%%% Day 3 addition -> calculating step failure rate
 
 %Runs numerical integration arbitrary RK method using variable time steps
 %INPUTS:
@@ -18,7 +19,8 @@
 %X_list: the vector of X, [X0';X1';X2';...;(X_end)'] at each time step
 %h_avg: the average step size
 %num_evals: total number of calls made to rate_func_in during the integration
-function [t_list,X_list,h_avg, num_evals] = explicit_RK_variable_step_integration ...
+%step_failure_rate: # of failed steps / # of attempted steps
+function [t_list,X_list,h_avg, num_evals, step_failure_rate] = explicit_RK_variable_step_integration ...
 (rate_func_in,tspan,X0,h_ref,BT_struct,p,error_desired)
     %your code here
 
@@ -35,6 +37,8 @@ function [t_list,X_list,h_avg, num_evals] = explicit_RK_variable_step_integratio
     num_evals = 0;
     total_step_size = 0;
     accepted_steps = 0;
+    attempted_steps = 0;
+    total_failed_steps = 0;
 
     % run loop
     while t_n < t_end
@@ -49,6 +53,7 @@ function [t_list,X_list,h_avg, num_evals] = explicit_RK_variable_step_integratio
 
         if redo % need to retry with a different step size
             h = h_next;
+            total_failed_steps = total_failed_steps + 1;
         else % step is fine, updating happens
             t_n = t_n + h;
             X_n = XB(:);
@@ -60,8 +65,12 @@ function [t_list,X_list,h_avg, num_evals] = explicit_RK_variable_step_integratio
             h = h_next;
 
         end
+        attempted_steps = attempted_steps + 1;
     end
 
     % calculate avg accepted step size
     h_avg = total_step_size / accepted_steps;
+
+    % calculate step failure rate
+    step_failure_rate = total_failed_steps / attempted_steps;
 end
