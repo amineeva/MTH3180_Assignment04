@@ -14,11 +14,23 @@
 %dVdt: a column vector describing the time derivative of V:
 % dVdt = [dxdt_p; dydt_p; d2xdt2_p; d2ydt2_p]
 function dVdt = gravity_rate_func(t,V,orbit_params)
-x_p=V(1);
-y_p=V(2);
-dxdt_p=V(3);
-dydt_p=V(4);
-d2xdt2_p = x_p*(-orbit_params.m_sun*orbit_params.G/((x_p^2+y_p^2)^1.5));
-d2ydt2_p = y_p*(-orbit_params.m_sun*orbit_params.G/((x_p^2+y_p^2)^1.5));
-dVdt = [dxdt_p; dydt_p; d2xdt2_p; d2ydt2_p];
+    %your code here
+    x_p = V(1);
+    y_p = V(2);
+    dxdt_p = V(3);
+    dydt_p = V(4);
+
+    m_s = orbit_params.m_sun;
+    G = orbit_params.G;
+
+    r = sqrt(x_p^2 + y_p^2);
+
+    d2xdt2_p = -G*m_s*x_p/r^3;
+
+    d2ydt2_p = -G*m_s*y_p/r^3;
+
+
+    dVdt = [dxdt_p; dydt_p; d2xdt2_p; d2ydt2_p];
+
+
 end
